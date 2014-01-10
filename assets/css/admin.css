@@ -1,0 +1,20 @@
+.cb{
+    clear: both;
+}
+#north{
+    height: 50px;
+}
+#south{
+    height: 50px;
+}
+#west{
+    float:left;
+    width:200px;
+}
+#east_wrap{
+    margin:0 0 0 200px;
+}
+#east{
+    width:100%;
+    float: left;
+}
