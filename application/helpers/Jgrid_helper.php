@@ -10,13 +10,17 @@ if ( ! function_exists('get_jgrid_options'))
         if (!$setting) {
             $setting = new stdClass;
         }
+        else if (is_array($setting))
+        {
+            $setting = (object)$setting;
+        }
 
-        // 當前動作的資料夾
-        $directory = get_action_directory();
+        // 當前動作的controller
+        $controller = get_action_controller();
 
         $options = new stdClass;
-        $options->url = $directory . '/list_data';
-        $options->editurl = $directory . '/edit_data';
+        $options->url = $controller . '/list_data';
+        $options->editurl = $controller . '/edit_data';
         $options->datatype = "json";
         $options->mtype = 'POST';
         $options->colModel = new stdClass;
@@ -25,8 +29,8 @@ if ( ! function_exists('get_jgrid_options'))
         $options->pager = '#jqGrid-pager';
         $options->sortname = 'id';
         $options->viewrecords = true;
-        $options->sortorder = 'desc';
-        $options->caption = $directory;
+        $options->sortorder = 'asc';
+        $options->caption = $controller;
         $options->height = '100%';
 
         // 覆寫預設值
@@ -75,6 +79,12 @@ if ( ! function_exists('get_jgrid_colmodel'))
             $editoptions['value'] = '1:0';
         }
 
+        // 設定為select
+        if (isset($setting->select))
+        {
+            $setting->edittype = 'select';
+        }
+
         // 有設定預設值
         if (isset($setting->value))
         {
@@ -89,6 +99,7 @@ if ( ! function_exists('get_jgrid_colmodel'))
             unset($setting->defaultValue);
         }
 
+        // 編輯隱藏
         if (isset($setting->edithidden))
         {
             $editrules['edithidden'] = $setting->edithidden;
@@ -133,6 +144,80 @@ if ( ! function_exists('get_colmodel'))
         }
 
         $options = get_jgrid_colmodel($setting);
+
+        return $options;
+    }
+}
+
+/**
+ * 轉換成editoptions所需的參數
+ */
+if ( ! function_exists('convert_editoptions_value'))
+{
+    function convert_editoptions_value($elm = null)
+    {
+        $obj = new stdClass;
+
+        if (is_object($elm))
+        {
+            foreach ($elm as $v)
+            {
+                $obj->{$v->id} = $v->name;
+            }
+        }
+        else if (is_array($elm))
+        {
+            foreach ($elm as $v)
+            {
+                $obj->{$v->id} = $v->name;
+            }
+        }
+
+        return $obj;
+    }
+}
+
+/**
+ * 取得treejgrid options
+ */
+if ( ! function_exists('get_treejgrid_options'))
+{
+    function get_treejgrid_options($setting = null)
+    {
+        if (!$setting) {
+            $setting = new stdClass;
+        }
+        else if (is_array($setting))
+        {
+            $setting = (object)$setting;
+        }
+
+        // 當前動作的controller
+        $controller = get_action_controller();
+
+        $options = new stdClass;
+        $options->treeGrid = true;
+        $options->treeGridModel = 'adjacency';
+        $options->ExpandColumn = 'name';
+        $options->url = $controller . '/tree_data';
+        $options->datatype = "json";
+        $options->mtype = 'POST';
+        $options->colModel = new stdClass;
+        $options->pager = '#ptreegrid';
+        $options->caption = $controller;
+        $options->height = 'auto';
+        $options->treeReader = array(
+                "level_field" => "level",
+                "parent_id_field" => "parent_id",
+                "leaf_field" => "leaf",
+                "expanded_field" => "expanded"
+            );
+
+        // 覆寫預設值
+        foreach($setting as $k=>$v)
+        {
+            $options->{$k} = $v;
+        }
 
         return $options;
     }

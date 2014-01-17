@@ -14,6 +14,12 @@ class MY_Controller extends CI_Controller {
         if(preg_match('/application\/json/i', $this->input->server('HTTP_ACCEPT'))){
             $this->output->set_content_type('application/json');
         }
+
+        // 載入my_common
+        $this->load->helper('my_common');
+
+        // 設定語系
+        set_current_language();
     }
 }
 
@@ -21,9 +27,6 @@ class MY_Controller extends CI_Controller {
  * 後台管理者
  */
 class Admin_Controller extends MY_Controller {
-
-    var $jqgrid_options;
-    var $directory;
 
     function __construct()
     {
@@ -37,12 +40,6 @@ class Admin_Controller extends MY_Controller {
 
         // 載入jgrid fun
         $this->load->helper('jgrid');
-
-        // // 建構directory
-        // $this->init_directory();
-
-        // // 建構jqgrid options
-        // $this->init_jqgrid_options();
     }
 
     // 檢查有無登入後台
@@ -53,37 +50,12 @@ class Admin_Controller extends MY_Controller {
         return $bool;
     }
 
-    /**
-     * 建構directory
-     */
-    function init_directory()
+    // 載入預設model
+    function load_default_model()
     {
-        $this->directory = str_replace('/', '', $this->router->directory);
-    }
-
-    /**
-     * 建構jqgrid options
-     */
-    function init_jqgrid_options()
-    {
-
-        $options = new stdClass;
-        $options->url = $this->directory . '/list_data';
-        $options->editurl = $this->directory . '/edit_data';
-        $options->datatype = "json";
-        $options->mtype = 'POST';
-        $options->colModel = new stdClass;
-        $options->rowNum = 10;
-        $options->rowList = array(10, 20, 30);
-        $options->pager = '#jqGrid-pager';
-        $options->sortname = 'id';
-        $options->viewrecords = true;
-        $options->sortorder = 'desc';
-        $options->caption = $this->directory;
-        // $options->postData = [];
-        $options->height = '100%';
-
-        $this->jqgrid_options = $options;
+        $class_name = strtolower(get_class($this));
+        $model_name = str_replace('admin_', '', $class_name);
+        $this->load->model($model_name . '_model', 'post');
     }
 }
 

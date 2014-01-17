@@ -23,6 +23,7 @@ class QueryLogHook {
             $output .= "===[took:{$took}]\n\n";
         }
 
+        // $CI->fb->info($output);
         $CI->load->helper('file');
         if ( ! write_file(APPPATH  . '/logs/queries-' . date('Y-m-d') . '.log', $output, 'a+'))
         {

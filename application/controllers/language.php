@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin extends Admin_Controller {
+class Language extends Admin_Controller {
 
     /**
      * Index Page for this controller.
@@ -19,23 +19,19 @@ class Admin extends Admin_Controller {
      */
     public function index()
     {
-        $parent_id = $this->input->post('parent_id');
-
         $colModel = array();
         $colModel[] = get_colmodel(array('name'=> 'id', 'hidden' => true));
-        $colModel[] = get_colmodel(array('name'=> 'parent_id', 'hidden' => true, 'value' => $parent_id, 'edithidden' => false));
         $colModel[] = get_colmodel(array('name'=> 'name', 'required' => true));
-        $colModel[] = get_colmodel(array('name'=> 'column_name'));
-        $colModel[] = get_colmodel(array('name'=> 'type_id', 'required' => true, 'integer' => true));
-        $colModel[] = get_colmodel(array('name'=> 'length', 'integer' => true));
-        $colModel[] = get_colmodel(array('name'=> 'nullable', 'checkbox' => true));
-        $colModel[] = get_colmodel(array('name'=> 'updatable', 'checkbox' => true, 'defaultValue' => '1'));
-        $colModel[] = get_colmodel(array('name'=> 'multilingual', 'checkbox' => true));
+        $colModel[] = get_colmodel(array('name'=> 'map'));
+        $colModel[] = get_colmodel(array('name'=> 'datepicker'));
+        $colModel[] = get_colmodel(array('name'=> 'editor'));
+        $colModel[] = get_colmodel(array('name'=> 'browser'));
+        $colModel[] = get_colmodel(array('name'=> 'sort', 'hidden' => true));
+        $colModel[] = get_colmodel(array('name'=> 'deleted', 'hidden' => true));
+        $colModel[] = get_colmodel(array('name'=> 'jqgrid'));
 
         $jgrid_options = get_jgrid_options();
         $jgrid_options->colModel = $colModel;
-
-        $jgrid_options->postData = $this->input->post();
 
         $rs = new stdClass;
         $rs->fun = 'jqrid';
@@ -44,7 +40,6 @@ class Admin extends Admin_Controller {
         $data['json_data'] = $rs;
 
         $this->template->render('json', $data);
-
     }
 
     /**
@@ -53,12 +48,14 @@ class Admin extends Admin_Controller {
      */
     public function list_data()
     {
-        // 當前動作的資料夾
-        $directory = get_action_directory();
-
-        $this->load->model($directory . '_model', 'post');
+        $this->load_default_model();
 
         $info = $this->post->get_list_data();
+
+        foreach($info->rows as &$v)
+        {
+            $v->childrens_url = 'property/index/' . $v->id;
+        }
 
         $rs = new stdClass;
         $data['json_data'] = $info;
@@ -72,10 +69,7 @@ class Admin extends Admin_Controller {
      */
     public function edit_data()
     {
-        // 當前動作的資料夾
-        $directory = get_action_directory();
-
-        $this->load->model($directory . '_model', 'post');
+        $this->load_default_model();
 
         $data = $this->input->post();
 

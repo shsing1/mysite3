@@ -910,9 +910,13 @@ class CHH_Model extends MY_Model
     protected $soft_delete = TRUE;
 
     protected $before_create = array('match_fields');
+    protected $after_create = array('set_sort');
     protected $before_update = array('match_fields');
 
     protected $list_count_childrens = false;
+
+    protected $order_by = 'sort';
+    protected $order_sort = 'asc';
 
     /**
      * 匹配資料與資料庫欄位
@@ -1055,12 +1059,14 @@ class CHH_Model extends MY_Model
      * @param  array $list 全部資料數
      * @return object
      */
-    function get_list_data() {
+    public function get_list_data() {
 
         // $this->load->model($this->router->fetch_module() . '_model', 'post');
 
         $page = (int)$this->input->post('page');
         $limit = (int)$this->input->post('rows');
+        $sidx = $this->input->post('sidx');
+        $sord = $this->input->post('sord');
 
         $this->db->select('count(id) AS records');
         $rows = $this->get_all();
@@ -1083,6 +1089,15 @@ class CHH_Model extends MY_Model
         if ($this->get_list_count_childrens()) {
             $this->count_childrens();
         }
+
+        // 有指定排序
+        if ($sidx && $sord)
+        {
+            $this->order_by($sidx, $sord);
+        }
+
+        $this->order_by($this->order_by, $this->order_sort);
+
         $this->limit($limit, $start);
         $rows = $this->get_all();
 
@@ -1094,6 +1109,52 @@ class CHH_Model extends MY_Model
         $info->rows = $rows;
 
         return $info;
+    }
+
+    /**
+     * 資料新增後更新排序字
+     * @param [type] $id [description]
+     */
+    function set_sort($id = null)
+    {
+        // $this->fb->info($id);
+        $data = $this->get($id);
+        $data->sort = $id;
+        $this->update($id, $data);
+
+        return $id;
+    }
+}
+
+class Category_Model extends CHH_Model
+{
+    protected $list_count_childrens = true;
+
+    protected $before_get = array('set_parent');
+
+    protected $data_model = '';
+
+    // 層數
+    protected $depth = 1;
+
+    /**
+     * 統計下層數量
+     * @return [type] [description]
+     */
+    function count_childrens()
+    {
+        $parent_id = (int)$this->input->post('parent_id');
+        $this->select("*, (select count(*) FROM `".$this->db->dbprefix($this->_table)."` AS `children_table` WHERE `children_table`.`parent_id` = `".$this->db->dbprefix($this->_table)."`.`id`) AS `childrens`");
+    }
+
+    /**
+     * 指定上層id
+     */
+    function set_parent()
+    {
+        $parent_id = (int)$this->input->post('parent_id');
+
+        $this->db->where('parent_id', $parent_id);
     }
 }
 

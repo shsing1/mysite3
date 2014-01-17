@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends Admin_Controller {
+class Admin extends Admin_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -27,10 +27,12 @@ class Welcome extends Admin_Controller {
         // $this->template->add_js('/assets/js/i18n/grid.locale-'.$this->session->userdata('current_language')->jqgrid.'.js', TRUE);
         $this->template->add_js('/assets/js/i18n/grid.locale-tw.js', TRUE);
         $this->template->add_js('/assets/js/jquery.jqGrid.min.js', TRUE);
+        $this->template->add_js('/assets/js/dist/jstree.min.js', TRUE);
         $this->template->add_js('/assets/js/admin.init.js', TRUE);
 
         // 設定後台需載入的css
         $this->template->add_css('/assets/css/ui.jqgrid.css');
+        $this->template->add_css('/assets/js/dist/themes/default/style.min.css');
         $this->template->add_css('/assets/css/admin.css');
 
 		$this->template->render('admin/index');

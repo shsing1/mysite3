@@ -41,8 +41,8 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
-$route['admin/login'] = "admin/visitor/login";
-$route['admin/(\w*)'] = "$1/admin";
-$route['admin/(\w*)/(\w*)'] = "$1/admin/$2";
+// $route['admin/login'] = "admin/visitor/login";
+// $route['admin/(\w*)'] = "$1/admin";
+// $route['admin/(\w*)/(.*)'] = "$1/admin/$2";
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

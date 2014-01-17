@@ -75,3 +75,18 @@ if ( ! function_exists('get_action_directory'))
         return $directory;
     }
 }
+
+/**
+ * 取得當前動作的controller
+ */
+if ( ! function_exists('get_action_controller'))
+{
+    function get_action_controller()
+    {
+        $CI =& get_instance();
+
+        $str = str_replace('/', '', $CI->router->class);
+
+        return $str;
+    }
+}

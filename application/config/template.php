@@ -10,7 +10,8 @@ $config['template_layout'] = 'admin/layout_json';
  * default css
  */
 $config['template_css'] = array(
-    'http://reset5.googlecode.com/hg/reset.min.css' => 'screen',
+    // 'http://reset5.googlecode.com/hg/reset.min.css' => 'screen',
+    'http://yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css' => 'screen',
     'http://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.min.css' => 'screen'
     // 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/redmond/jquery-ui.min.css' => 'screen'
     // '/assets/css/index.css' => 'screen'

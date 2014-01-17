@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin extends Admin_Controller {
+class Entity extends Admin_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,8 +22,9 @@ class Admin extends Admin_Controller {
 		$colModel = array();
 		$colModel[] = get_colmodel(array('name'=> 'id', 'hidden' => true));
 		$colModel[] = get_colmodel(array('name'=> 'name', 'required' => true));
-		$colModel[] = get_colmodel(array('name'=> 'table_name', 'required' => true));
-		$colModel[] = get_colmodel(array('name'=> 'childrens', 'editable' => false, 'formatter' => 'showlink', 'formatoptions' => array('baseLinkUrl' => 'property', 'idName' => 'parent_id')));
+		$colModel[] = get_colmodel(array('name'=> 'table_name'));
+		// $colModel[] = get_colmodel(array('name'=> 'childrens', 'editable' => false, 'formatter' => 'showlink', 'formatoptions' => array('baseLinkUrl' => 'property', 'idName' => 'parent_id')));
+		$colModel[] = get_colmodel(array('name'=> 'childrens', 'editable' => false, 'formatter' => 'childrens_link'));
 
 		$jgrid_options = get_jgrid_options();
 		$jgrid_options->colModel = $colModel;
@@ -44,12 +45,14 @@ class Admin extends Admin_Controller {
 	 */
 	public function list_data()
     {
-    	// 當前動作的資料夾
-        $directory = get_action_directory();
-
-        $this->load->model($directory . '_model', 'post');
+    	$this->load_default_model();
 
         $info = $this->post->get_list_data();
+
+        foreach($info->rows as &$v)
+        {
+        	$v->childrens_url = 'property/index/' . $v->id;
+        }
 
         $rs = new stdClass;
         $data['json_data'] = $info;
@@ -63,13 +66,11 @@ class Admin extends Admin_Controller {
      */
     public function edit_data()
     {
-    	// 當前動作的資料夾
-        $directory = get_action_directory();
-
-        $this->load->model($directory . '_model', 'post');
+    	$this->load_default_model();
 
         $data = $this->input->post();
 
+        $id = $this->input->post('id');
         if ($data['oper'] === 'add') {
             $rs = $this->post->insert($data);
         } else if ($data['oper'] === 'edit') {

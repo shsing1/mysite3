@@ -6,7 +6,8 @@ class Property_Model extends CHH_Model {
     protected $_drop_id = null;
 
     protected $before_get = array('set_parent');
-    protected $after_create = array('add_column');
+    protected $after_get = array('format_data');
+    protected $after_create = array('set_sort', 'add_column');
     protected $before_delete = array('set_drop_column');
     protected $after_delete = array('drop_column');
 
@@ -30,31 +31,40 @@ class Property_Model extends CHH_Model {
 
         $info = $this->get($id);
 
+        if (!$info->column_name)
+        {
+            $info->column_name = $info->name;
+        }
+
         $paretn_info = $this->entity_model->get($info->parent_id);
         $type_info = $this->type_model->get($info->type_id);
 
-        // 不為entity or property
-        $column = array();
-        $column['type'] = $type_info->column_type;
-        $column['constraint'] = $info->length;
-        // int, boolean
-        if (in_array($info->type_id, array(1, 3))) {
-            $column['unsigned'] = true;
-        }
-
-        $fields = array();
-        // multilingual
-        if ((boolean)$info->multilingual) {
-            $this->load->model('language_model');
-            $language_list = $this->language_model->get_all();
-            foreach ($language_list as $v) {
-                $fields[$info->column_name . '__' . $v->id] = $column;
+        // 新增資料表
+        if (!$this->db->field_exists($info->column_name, $paretn_info->table_name))
+        {
+            $column = array();
+            $column['type'] = $type_info->column_type;
+            $column['constraint'] = $info->length;
+            // int, boolean
+            if (in_array($info->type_id, array(1, 5))) {
+                $column['unsigned'] = true;
             }
-        } else {
-            $fields[$info->column_name] = $column;
-        }
 
-        // $this->dbforge->add_column($paretn_info->table_name, $fields);
+            $fields = array();
+            // multilingual
+            if ((boolean)$info->multilingual) {
+                $this->load->model('language_model');
+                $language_list = $this->language_model->get_all();
+                foreach ($language_list as $v) {
+                    $fields[$info->column_name . '__' . $v->id] = $column;
+                }
+            } else {
+                $fields[$info->column_name] = $column;
+            }
+
+            $this->dbforge->add_column($paretn_info->table_name, $fields);
+        }
+        return $id;
     }
 
     /**
@@ -92,6 +102,16 @@ class Property_Model extends CHH_Model {
                 $this->dbforge->drop_column($paretn_info->table_name, $info->column_name);
             }
         }
+    }
+
+    /**
+     * 格式化資料
+     * @param  object $row 資料庫資料
+     * @return [type]      [description]
+     */
+    function format_data($row)
+    {
+        return $row;
     }
 }
 ?>

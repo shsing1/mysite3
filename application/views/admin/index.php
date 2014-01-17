@@ -1,5 +1,6 @@
 <div id="north">north</div>
 <div id="west">
+    <!--
     west<br/>
     <a href="/" class="js-as">home</a>
     <br/>
@@ -10,9 +11,11 @@
     <a href="language" class="js-as">language</a>
     <br/>
     <a href="backend_menu" class="js-as">backend_menu</a>
+    -->
+    <div id="jstree_demo_div"></div>
 </div>
 <div id="east_wrap">
-    <div id="east">east</div>
+    <div id="east"></div>
     <div class="cb"></div>
 </div>
 <div id="south">south</div>
