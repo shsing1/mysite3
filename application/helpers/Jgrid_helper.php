@@ -7,6 +7,8 @@ if ( ! function_exists('get_jgrid_options'))
 {
     function get_jgrid_options($setting = null)
     {
+        $CI =& get_instance();
+
         if (!$setting) {
             $setting = new stdClass;
         }
@@ -19,15 +21,16 @@ if ( ! function_exists('get_jgrid_options'))
         $controller = get_action_controller();
 
         $options = new stdClass;
-        $options->url = $controller . '/list_data';
-        $options->editurl = $controller . '/edit_data';
+        $options->url = $CI->config->item('base_url') . '/' . $controller . '/list_data';
+        $options->editurl = $CI->config->item('base_url') . '/' .  $controller . '/edit_data';
         $options->datatype = "json";
         $options->mtype = 'POST';
         $options->colModel = new stdClass;
+        $options->rownumbers = true;
         $options->rowNum = 10;
         $options->rowList = array(10, 20, 30);
         $options->pager = '#jqGrid-pager';
-        $options->sortname = 'id';
+        $options->sortname = 'sort';
         $options->viewrecords = true;
         $options->sortorder = 'asc';
         $options->caption = $controller;
@@ -184,6 +187,8 @@ if ( ! function_exists('get_treejgrid_options'))
 {
     function get_treejgrid_options($setting = null)
     {
+        $CI =& get_instance();
+
         if (!$setting) {
             $setting = new stdClass;
         }
@@ -199,7 +204,7 @@ if ( ! function_exists('get_treejgrid_options'))
         $options->treeGrid = true;
         $options->treeGridModel = 'adjacency';
         $options->ExpandColumn = 'name';
-        $options->url = $controller . '/tree_data';
+        $options->url = $CI->config->item('base_url') . '/' . $controller . '/tree_data';
         $options->datatype = "json";
         $options->mtype = 'POST';
         $options->colModel = new stdClass;

@@ -2,7 +2,7 @@
 /*jslint browser : true, devel: true, regexp: true */
 $(function () {
     'use strict';
-    var //site_root = '/admin',
+    var site_root = 'http://mysite3',
         win = $(window),
         // content = $('#content'),
         // doc = $(document),
@@ -156,7 +156,7 @@ $(function () {
             // Loads the page content and inserts it into the content area
             $.ajax({
                 // url: site_root + event.path,
-                url: event.path,
+                url: site_root + event.path,
                 data : event.parameters,
                 success: function(data) {
                     ajax_handler(data);
@@ -203,7 +203,7 @@ $(function () {
             'core' : {
                 // "themes" : { "stripes" : true, "dots" : false },
                 'data' : {
-                    'url' : 'backend_menu/tree_data/'
+                    'url' : site_root + '/backend_menu/tree_data/'
                 }
             }
         })
