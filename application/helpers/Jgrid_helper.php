@@ -26,6 +26,7 @@ if ( ! function_exists('get_jgrid_options'))
         $options->datatype = "json";
         $options->mtype = 'POST';
         $options->colModel = new stdClass;
+        $options->hidegrid = false;
         $options->rownumbers = true;
         $options->rowNum = 10;
         $options->rowList = array(10, 20, 30);

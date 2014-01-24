@@ -1,4 +1,6 @@
-<div id="north">north</div>
+<div id="north">
+    <div id="header" class="ui-widget-content">登出</div>
+</div>
 <div id="west">
     <!--
     west<br/>
@@ -18,4 +20,6 @@
     <div id="east"></div>
     <div class="cb"></div>
 </div>
-<div id="south">south</div>
+<div id="south">
+    <div id="copyright" class="ui-widget-content">Powered by shsing chang.</div>
+</div>

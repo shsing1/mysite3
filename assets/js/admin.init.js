@@ -208,6 +208,7 @@ $(function () {
             }
         })
             .on('select_node.jstree', function (node, seleted) {
+                node.namespace = 'jstree';
                 if (seleted.node) {
                     if (seleted.node.a_attr) {
                         if (seleted.node.a_attr.href) {
