@@ -1,9 +1,8 @@
-/*global $*/
+/*global $, config*/
 /*jslint browser : true, devel: true, regexp: true */
 $(function () {
     'use strict';
-    var site_root = 'http://mysite3',
-        win = $(window),
+    var win = $(window),
         // content = $('#content'),
         // doc = $(document),
         handler_fun = {},
@@ -46,7 +45,7 @@ $(function () {
      */
     // function load_list_elm() {
     //     $.ajax({
-    //         'url' : site_root + 'admin/entity/list_elm'
+    //         'url' : config.base_url + 'admin/entity/list_elm'
     //     });
 
     // }
@@ -85,6 +84,34 @@ $(function () {
         set_grid_width();
     }
 
+    handler_fun.my_cellattr = function (rowId, val, rawObject, cm, rdata) {
+        console.log(rowId);
+        console.log(val);
+        console.log(rawObject);
+        console.log(cm);
+        console.log(rdata);
+    };
+
+    function my_beforeShowForm(formid, type, options) {
+        var form = $(formid),
+            colModel = options.colModel;
+
+        if (type) {
+            type = type.toString();
+        }
+        $.each(colModel, function () {
+            // if has placeholder
+            if (this.placeholder) {
+                form.find('[name="' + this.name + '"]').attr({placeholder: this.placeholder});
+            }
+
+            // if has notice
+            if (this.notice) {
+                form.find('[name="' + this.name + '"]').after('<div class="notice">' + this.notice + '</div>');
+            }
+        });
+    }
+
     /**
      * [ 產生jqgrid列表]
      * @param  {[object]} options [設定參數]
@@ -102,12 +129,25 @@ $(function () {
         div.appendTo('#east');
         options.loadComplete = loadComplete;
         options.gridComplete = set_grid_width;
+
+        // $.each(options.colModel, function () {
+        //     if (this.editoptions) {
+        //         // console.log(this.cellattr);
+        //         // handler_fun[this.cellattr].call(this);
+        //         // this.cellattr = handler_fun[this.cellattr];
+        //         this.editoptions.dataInit = my_dataInit;
+        //     } else {
+        //         this.editoptions = {dataInit: my_dataInit};
+        //     }
+        // });
         div.find("#jqGrid-table").jqGrid(options);
         div.find("#jqGrid-table").jqGrid('navGrid', '#jqGrid-pager',
                 {}, // navGrid options
-                { editData: options.postData }, // add options
-                { editData: options.postData }, // edit options
-                { delData: options.postData }  // del options
+                { editData: options.postData, beforeShowForm: function (formid, type) { my_beforeShowForm(formid, type, options); }}, // edit options
+                { editData: options.postData, beforeShowForm: function (formid, type) { my_beforeShowForm(formid, type, options); }}, // add options
+                { delData: options.postData },  // del options
+                {}, // search options
+                {} // view options
             );
         // div.find("#jqGrid-table").jqGrid('navGrid', '#jqGrid-pager', {edit : false, add : false, del : false});
     };
@@ -155,8 +195,8 @@ $(function () {
             };*/
             // Loads the page content and inserts it into the content area
             $.ajax({
-                // url: site_root + event.path,
-                url: site_root + event.path,
+                // url: config.base_url + event.path,
+                url: config.base_url + event.path,
                 data : event.parameters,
                 success: function(data) {
                     ajax_handler(data);
@@ -203,7 +243,7 @@ $(function () {
             'core' : {
                 // "themes" : { "stripes" : true, "dots" : false },
                 'data' : {
-                    'url' : site_root + '/backend_menu/tree_data/'
+                    'url' : config.base_url + '/backend_menu/tree_data/'
                 }
             }
         })
@@ -221,6 +261,7 @@ $(function () {
             });
     }
 
+    // 視窗大小改變
     win.on('resize load', function () {
         set_east_height();
         set_grid_width();

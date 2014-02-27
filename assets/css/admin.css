@@ -32,3 +32,14 @@ body{
     text-align: right;
     padding: 0 30px;
 }
+
+/* 修正jquery ui bug */
+.ui-widget-overlay{
+    background-image:none;
+}
+
+/* jqgrid add notice */
+.FormGrid .notice{
+    color:#999999;
+    margin:1px 5px;
+}

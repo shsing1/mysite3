@@ -12,7 +12,7 @@ $config['template_layout'] = 'admin/layout_json';
 $config['template_css'] = array(
     // 'http://reset5.googlecode.com/hg/reset.min.css' => 'screen',
     'http://yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css' => 'screen',
-    'http://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.min.css' => 'screen'
+    'http://code.jquery.com/ui/1.10.4/themes/redmond/jquery-ui.min.css' => 'screen'
     // 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/redmond/jquery-ui.min.css' => 'screen'
     // '/assets/css/index.css' => 'screen'
 );
@@ -23,8 +23,8 @@ $config['template_css'] = array(
  * load javascript on footer: TRUE
  */
 $config['template_js'] = array(
-    'http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' => TRUE,
-    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js' => TRUE
+    'http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js' => TRUE,
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js' => TRUE
 );
 
 /**
