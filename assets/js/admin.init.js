@@ -1,4 +1,4 @@
-/*global $, config*/
+/*global $, config, CKEDITOR, noty*/
 /*jslint browser : true, devel: true, regexp: true */
 $(function () {
     'use strict';
@@ -6,7 +6,9 @@ $(function () {
         // content = $('#content'),
         // doc = $(document),
         handler_fun = {},
-        my_alert,
+        jqgrid_handler = {},
+        my = {},
+        processing,
         west = $('#west');
 
     $.ajaxSetup({
@@ -17,16 +19,25 @@ $(function () {
         },
         success: function(data, textStatus, xhr) {
             //called when successful
+        },
+        beforeSend: function () {
+            console.log(1);
+        },
+        success : function () {
+            console.log(2);
+        },
+        complete : function () {
+            console.log(3);
         },*/
         error: function(xhr) {
             //called when there is an error
             if (xhr.status !== 200) {
-                my_alert(xhr.statusText);
+                my.alert(xhr.statusText);
             }
         }
     });
 
-    my_alert = function (message) {
+    my.alert = function (message) {
         var div = $('<div>');
         div.attr({'title' : 'title'})
             .append(message)
@@ -38,6 +49,33 @@ $(function () {
                 }
             });
     };
+
+    my.information = function (message) {
+        var n;
+
+        n = noty({
+            layout: 'topCenter',
+            type: 'information',
+            text: message
+        });
+
+        return n;
+    };
+
+    my.success = function (message) {
+        var n;
+
+        n = noty({
+            layout: 'topCenter',
+            type: 'success',
+            text: message,
+            timeout: 3000
+        });
+
+        return n;
+    };
+
+    // my.information('processing');
 
     /**
      * [load_list_elm description]
@@ -79,38 +117,201 @@ $(function () {
      * 資料載入後處理後續動作
      * @param  {[type]} data   [description]
      */
-    function loadComplete() {
+    jqgrid_handler.loadComplete = function () {
         $("#jqGrid-table").find('a:not([href^=http])').address();
         set_grid_width();
-    }
-
-    handler_fun.my_cellattr = function (rowId, val, rawObject, cm, rdata) {
-        console.log(rowId);
-        console.log(val);
-        console.log(rawObject);
-        console.log(cm);
-        console.log(rdata);
     };
 
-    function my_beforeShowForm(formid, type, options) {
+    // 格式化資料形態
+    /*jqgrid_handler.format_edittype = function (options) {
+        var colModel = options.colModel;
+
+        $.each(colModel, function () {
+            console.log(1);
+            // 有設定edittype
+            if (this.edittype) {
+                console.log(2);
+                if (this.edittype === 'editor') {
+                    console.log(3);
+                    this.edittype = 'custom';
+                    this.editoptions = this.editoptions || {};
+                    this.editoptions.custom_element = function (value) {
+                        var el = $('<textarea>');
+
+                        el.attr({rows: 10, cols: 100}).val(value);
+                        return el.get(0);
+                    };
+                    this.editoptions.custom_value = function (elem, operation, value) {
+                        var el = $(elem);
+                        if (operation === 'set') {
+                            el.val(value);
+                            // if (CKEDITOR.instances[el.attr('id')]) {
+                            //     CKEDITOR.instances[el.attr('id')].destroy();
+                            // }
+                            CKEDITOR.replace(el.attr('id'), {
+                                customConfig: config.base_url + '/assets/js/ckeditor_config.js'
+                            });
+                        } else if (operation === 'get') {
+                            return CKEDITOR.instances[el.attr('id')].getData();
+                        }
+                    };
+                }
+            }
+        });
+    };*/
+
+    // 格式化表單項目
+    jqgrid_handler.my_afterShowForm = function (formid, options) {
         var form = $(formid),
             colModel = options.colModel;
 
-        if (type) {
-            type = type.toString();
-        }
+        // apply editor
+        $.each(form.find('.editor'), function () {
+            var id = $(this).attr('id');
+
+            CKEDITOR.replace(id, {
+                customConfig: config.base_url + '/assets/js/ckeditor_config.js'
+            });
+        });
+
+        // apply datepicker
+        $.each(form.find('.datepicker'), function () {
+            $(this).datepicker();
+        });
+
+        // apply datetimepicker
+        $.each(form.find('.datetimepicker'), function () {
+            $(this).datetimepicker();
+        });
+
+        // apply timepicker
+        $.each(form.find('.timepicker'), function () {
+            $(this).timepicker();
+        });
+
+        // apply file
+        $.each(form.find('.file'), function () {
+            var wrap = $('<span class="fileupload-buttonbar"><span class="fileinput-button"><span>瀏覽檔案...</span></span></span>');
+            $(this).wrap(wrap);
+            // $(this).before('<span>瀏覽檔案...</span>');
+            // wrap.find('.fileinput-button').append($(this));
+            form.fileupload({
+                dataType: 'json',
+                done: function (e, data) {
+                    console.log(1);
+                    // $.each(data.result.files, function (index, file) {
+                    //     $('<p/>').text(file.name).appendTo(document.body);
+                    // });
+                }
+            });
+        });
+
         $.each(colModel, function () {
+            var el = form.find('[name="' + this.name + '"]');
+
             // if has placeholder
-            if (this.placeholder) {
-                form.find('[name="' + this.name + '"]').attr({placeholder: this.placeholder});
-            }
+            // if (this.placeholder) {
+            //     el.attr({placeholder: this.placeholder});
+            // }
 
             // if has notice
             if (this.notice) {
-                form.find('[name="' + this.name + '"]').after('<div class="notice">' + this.notice + '</div>');
+                el.after('<div class="notice">' + this.notice + '</div>');
+            }
+
+            // if has datepicker
+            // if (this.datepicker) {
+            //     el.datepicker(this.datepicker);
+            // }
+
+            // if has datetimepicker
+            // if (this.datetimepicker) {
+            //     el.datetimepicker(this.datetimepicker);
+            // }
+
+            // if has mask
+            if (this.mask) {
+                el.mask(this.mask);
+            }
+
+            // if has editor
+            // if (this.editor) {
+            //     CKEDITOR.replace(el.attr('id'), {
+            //         customConfig: config.base_url + '/assets/js/ckeditor_config.js'
+            //     });
+            // }
+        });
+    };
+
+    jqgrid_handler.onClose = function (tableid) {
+        var table = $(tableid);
+
+        // editor destroy
+        // $.each(cke, function () {
+        //     var elm = $(this).parent().children('textarea');
+
+        //     if (CKEDITOR.instances[elm.attr('id')]) {
+        //         CKEDITOR.instances[elm.attr('id')].destroy();
+        //     }
+        // });
+        $.each(table.find('.editor'), function () {
+            var el = $(this),
+                id = el.attr('id');
+            if (CKEDITOR.instances[id]) {
+                // console.log(id);
+                CKEDITOR.instances[id].destroy();
             }
         });
-    }
+
+        table.prev().remove();
+        table.remove();
+        // console.log(table);
+        // $.jgrid.closeModal();
+
+        return true;
+    };
+
+    jqgrid_handler.my_afterclickPgButtons = function (whichbutton, formid, rowid) {
+        var row_data = $('#jqGrid-table').jqGrid('getRowData', rowid),
+            form = $(formid);
+
+        whichbutton = whichbutton || null;
+        $.each(form.find('.editor'), function () {
+            var $this = $(this),
+                id = $this.attr('id');
+
+            if (CKEDITOR.instances[id]) {
+                CKEDITOR.instances[id].setData(row_data[id]);
+            }
+        });
+    };
+
+    jqgrid_handler.my_beforeSubmit = function (postdata, formid) {
+        var form = $(formid);
+
+        postdata = postdata || null;
+        $.each(form.find('.editor'), function () {
+            var $this = $(this),
+                id = $this.attr('id');
+
+            if (CKEDITOR.instances[id]) {
+                // console.log(CKEDITOR.instances[id].getData());
+                postdata[id] = CKEDITOR.instances[id].getData();
+                // $this.val(CKEDITOR.instances[id].getData());
+            }
+
+        });
+        return [true, null];
+    };
+
+    jqgrid_handler.my_afterSubmit = function (response, postdata) {
+        response = response || null;
+        postdata = postdata || null;
+        // console.log(response);
+        // console.log(postdata);
+        my.success('成功更新！');
+        return [true, 'unknow'];
+    };
 
     /**
      * [ 產生jqgrid列表]
@@ -119,6 +320,7 @@ $(function () {
     handler_fun.jqrid = function (options) {
         var html,
             div;
+
         // 刪除舊有的
         $('#jqGrid-panel').remove();
         html =  '<div id="jqGrid-panel">' +
@@ -127,24 +329,60 @@ $(function () {
                 '</div>';
         div = $(html);
         div.appendTo('#east');
-        options.loadComplete = loadComplete;
+
+        // 格式化表單項目
+        // jqgrid_handler.format_edittype(options);
+
+        options.loadComplete = jqgrid_handler.loadComplete;
         options.gridComplete = set_grid_width;
 
-        // $.each(options.colModel, function () {
-        //     if (this.editoptions) {
-        //         // console.log(this.cellattr);
-        //         // handler_fun[this.cellattr].call(this);
-        //         // this.cellattr = handler_fun[this.cellattr];
-        //         this.editoptions.dataInit = my_dataInit;
-        //     } else {
-        //         this.editoptions = {dataInit: my_dataInit};
-        //     }
-        // });
+
         div.find("#jqGrid-table").jqGrid(options);
         div.find("#jqGrid-table").jqGrid('navGrid', '#jqGrid-pager',
                 {}, // navGrid options
-                { editData: options.postData, beforeShowForm: function (formid, type) { my_beforeShowForm(formid, type, options); }}, // edit options
-                { editData: options.postData, beforeShowForm: function (formid, type) { my_beforeShowForm(formid, type, options); }}, // add options
+                // edit options
+                {
+                width: 'auto',
+                resize: false,
+                // viewPagerButtons : false,
+                editData: options.postData,
+                afterShowForm: function (formid) {
+                    jqgrid_handler.my_afterShowForm(formid, options);
+                },
+                afterclickPgButtons: function (whichbutton, formid, rowid) {
+                    jqgrid_handler.my_afterclickPgButtons(whichbutton, formid, rowid);
+                },
+                beforeSubmit: function (postdata, formid) {
+                    processing = my.information('處理中…');
+                    return jqgrid_handler.my_beforeSubmit(postdata, formid);
+                },
+                afterSubmit : function (response, postdata) {
+                    processing.close();
+                    return jqgrid_handler.my_afterSubmit(response, postdata);
+                },
+                onClose: function (tableid) {
+                    return jqgrid_handler.onClose(tableid);
+                }
+            },
+                // add options
+                {
+                width: 'auto',
+                resize: false,
+                // viewPagerButtons : false,
+                editData: options.postData,
+                afterShowForm: function (formid) {
+                    jqgrid_handler.my_afterShowForm(formid, options);
+                },
+                afterclickPgButtons: function (whichbutton, formid, rowid) {
+                    jqgrid_handler.my_afterclickPgButtons(whichbutton, formid, rowid);
+                },
+                beforeSubmit: function (postdata, formid) {
+                    return jqgrid_handler.my_beforeSubmit(postdata, formid);
+                },
+                onClose: function (tableid) {
+                    return jqgrid_handler.onClose(tableid);
+                }
+            },
                 { delData: options.postData },  // del options
                 {}, // search options
                 {} // view options

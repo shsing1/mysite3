@@ -28,12 +28,22 @@ class Admin extends Admin_Controller {
         $this->template->add_js(site_url('assets/js/i18n/grid.locale-tw.js'), TRUE);
         $this->template->add_js(site_url('assets/js/jquery.jqGrid.min.js'), TRUE);
         $this->template->add_js(site_url('assets/js/dist/jstree.min.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery-ui-timepicker-addon.min.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/i18n/jquery-ui-timepicker-zh-TW.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery.maskedinput.min.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/ckeditor/ckeditor.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery.noty.packaged.min.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery.iframe-transport.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery.fileupload.js'), TRUE);
+        $this->template->add_js(site_url('assets/js/jquery.fileupload-jquery-ui.js'), TRUE);
         $this->template->add_js(site_url('config'), TRUE);
         $this->template->add_js(site_url('assets/js/admin.init.js'), TRUE);
 
         // 設定後台需載入的css
         $this->template->add_css(site_url('assets/css/ui.jqgrid.css'));
         $this->template->add_css(site_url('assets/js/dist/themes/default/style.min.css'));
+        $this->template->add_css(site_url('assets/css/jquery-ui-timepicker-addon.min.css'));
+        $this->template->add_css(site_url('assets/css/jquery.fileupload.css'));
         $this->template->add_css(site_url('assets/css/admin.css'));
 
 		$this->template->render('admin/index');

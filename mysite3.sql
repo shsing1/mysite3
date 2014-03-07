@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: 127.0.0.1
--- 產生日期: 2014 年 01 月 24 日 11:32
+-- 產生日期: 2014 年 03 月 07 日 11:49
 -- 伺服器版本: 5.5.32
 -- PHP 版本: 5.4.16
 
@@ -312,9 +312,8 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-('2aa8afd73dcb72049a094625685fd15f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:26.0) Gecko/20100101 Firefox/26.0 FirePHP/0.7.4', 1390558377, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}'),
-('b17f745cd5e440267894a3b4cd1e70a7', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:26.0) Gecko/20100101 Firefox/26.0 FirePHP/0.7.4', 1390557453, ''),
-('c63e753c19d49c094591d6f13bb75604', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:26.0) Gecko/20100101 Firefox/26.0', 1390557450, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}');
+('bb9ca006ebc27e12ea8d27a1da89ef92', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0', 1394184624, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}'),
+('d5338ea2404702fb9d2d32985401362f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0 FirePHP/0.7.4', 1394189030, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

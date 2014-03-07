@@ -43,3 +43,7 @@ body{
     color:#999999;
     margin:1px 5px;
 }
+.EditTable .editor{
+    width:800px;
+    height:300px;
+}

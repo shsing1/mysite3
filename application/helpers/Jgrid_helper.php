@@ -110,6 +110,50 @@ if ( ! function_exists('get_jgrid_colmodel'))
             unset($setting->edithidden);
         }
 
+        // html 編輯器
+        if (isset($setting->editor))
+        {
+            $setting->edittype = 'textarea';
+            $editoptions['class'] = 'editor';
+            unset($setting->editor);
+        }
+
+        // placeholder
+        if (isset($setting->placeholder))
+        {
+            $editoptions['placeholder'] = $setting->placeholder;
+            unset($setting->placeholder);
+        }
+
+        // 日期選擇器
+        if (isset($setting->datepicker))
+        {
+            $editoptions['class'] = 'datepicker';
+            unset($setting->datepicker);
+        }
+
+        // 日期時間選擇器
+        if (isset($setting->datetimepicker))
+        {
+            $editoptions['class'] = 'datetimepicker';
+            unset($setting->datetimepicker);
+        }
+
+        // 時間選擇器
+        if (isset($setting->timepicker))
+        {
+            $editoptions['class'] = 'timepicker';
+            unset($setting->timepicker);
+        }
+
+        // 檔案
+        if (isset($setting->file))
+        {
+            $setting->edittype = 'file';
+            $editoptions['class'] = 'file';
+            unset($setting->file);
+        }
+
         $options = new stdClass;
         $options->editable = true;
 

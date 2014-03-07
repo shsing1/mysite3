@@ -24,7 +24,8 @@ $config['template_css'] = array(
  */
 $config['template_js'] = array(
     'http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js' => TRUE,
-    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js' => TRUE
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js' => TRUE,
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/i18n/jquery-ui-i18n.min.js' => TRUE
 );
 
 /**
