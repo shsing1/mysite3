@@ -191,17 +191,52 @@ $(function () {
 
         // apply file
         $.each(form.find('.file'), function () {
-            var wrap = $('<span class="fileupload-buttonbar"><span class="fileinput-button"><span>瀏覽檔案...</span></span></span>');
-            $(this).wrap(wrap);
+            var wrap = $('<div class="fileupload-panel" style="margin-left:5px;">' +
+                            '<div class="fileupload-buttonbar">' +
+                                '<span class="btn btn-success fileinput-button">' +
+                                    '<i class="glyphicon glyphicon-plus"></i>' +
+                                    '<span>選擇檔案...</span>' +
+                                '</span>' +
+                            '</div>' +
+                            '<div id="progressbar" style="margin-top:5px;height:10px;display:none;"></div>' +
+                            '<div id="files" class="files"></div>' +
+                        '</div>'),
+                progressbar,
+                files;
+
+            $(this).parent().html('').append(wrap);
+            wrap.find('.fileinput-button').append($(this));
+            progressbar = wrap.find("#progressbar");
+            files = wrap.find("#files");
+
+            // progressbar.progressbar({
+            //     value: 0
+            // });
             // $(this).before('<span>瀏覽檔案...</span>');
             // wrap.find('.fileinput-button').append($(this));
             form.fileupload({
+                url: config.base_url + '/file_upload',
+                paramName: 'files[]',
                 dataType: 'json',
                 done: function (e, data) {
-                    console.log(1);
-                    // $.each(data.result.files, function (index, file) {
-                    //     $('<p/>').text(file.name).appendTo(document.body);
-                    // });
+                    e = e || null;
+                    $.each(data.result.files, function (index, file) {
+                        index = index || null;
+                        files.html('').append($('<p/>').text(file.name));
+                        progressbar.hide();
+                    });
+                },
+                start: function () {
+                    progressbar.show().progressbar({
+                        value: false
+                    });
+                },
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    e = e || null;
+                    progressbar.progressbar({
+                        value: progress
+                    });
                 }
             });
         });

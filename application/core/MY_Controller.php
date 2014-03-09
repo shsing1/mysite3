@@ -20,6 +20,24 @@ class MY_Controller extends CI_Controller {
 
         // 設定語系
         set_current_language();
+
+        // 權限檢查
+        $this->permissions_check();
+    }
+
+    /**
+     * 權限檢查
+     * @return [type] [description]
+     */
+    function permissions_check()
+    {
+        // $this->fb->info($this->router->class);
+        // $this->fb->info($this->router->method);
+        // 後台首頁不檢查
+        // if ()
+        // {
+
+        // }
     }
 }
 
