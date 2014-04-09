@@ -20,17 +20,17 @@ class Role extends Admin_Controller {
 	public function index()
 	{
         // 取得type 資料
-        $this->load->model('type_model');
-        $type_list =  $this->type_model->get_all();
-        $type_value = convert_editoptions_value($type_list);
+        // $this->load->model('type_model');
+        // $type_list =  $this->type_model->get_all();
+        // $type_value = convert_editoptions_value($type_list);
 
 		$colModel = array();
 		$colModel[] = get_colmodel(array('name'=> 'id', 'hidden' => true));
-        $colModel[] = get_colmodel(array('name'=> 'type_id', 'required' => true, 'select' => true, 'value' => $type_value));
+        // $colModel[] = get_colmodel(array('name'=> 'type_id', 'required' => true, 'select' => true, 'value' => $type_value));
 		$colModel[] = get_colmodel(array('name'=> 'name__1', 'required' => true));
         $colModel[] = get_colmodel(array('name'=> 'name__2', 'required' => true, 'hidden' => true, 'edithidden' => true));
         $colModel[] = get_colmodel(array('name'=> 'name__3', 'required' => true, 'hidden' => true, 'edithidden' => true));
-		$colModel[] = get_colmodel(array('name'=> 'childrens', 'editable' => false, 'formatter' => 'childrens_link'));
+		// $colModel[] = get_colmodel(array('name'=> 'childrens', 'editable' => false, 'formatter' => 'childrens_link'));
 
 		$jgrid_options = get_jgrid_options();
 		$jgrid_options->colModel = $colModel;
@@ -52,9 +52,9 @@ class Role extends Admin_Controller {
 	public function list_data()
     {
         // 取得type 資料
-        $this->load->model('type_model');
-        $type_list =  $this->type_model->get_all();
-        $type_value = convert_editoptions_value($type_list);
+        // $this->load->model('type_model');
+        // $type_list =  $this->type_model->get_all();
+        // $type_value = convert_editoptions_value($type_list);
 
     	$this->load_default_model();
 
@@ -62,8 +62,8 @@ class Role extends Admin_Controller {
 
         foreach($info->rows as &$v)
         {
-            $v->type_id = $type_value->{$v->type_id};
-        	$v->childrens_url = 'option_item/index/' . $v->id;
+            // $v->type_id = $type_value->{$v->type_id};
+        	// $v->childrens_url = 'option_item/index/' . $v->id;
         }
 
         $rs = new stdClass;
