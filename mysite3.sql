@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: 127.0.0.1
--- 產生日期: 2014 年 03 月 07 日 11:49
+-- 產生日期: 2014 年 04 月 11 日 13:03
 -- 伺服器版本: 5.5.32
 -- PHP 版本: 5.4.16
 
@@ -23,6 +23,21 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- 表的結構 `ci_auth_account`
+--
+
+CREATE TABLE IF NOT EXISTS `ci_auth_account` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sort` int(10) unsigned NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `account` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- 表的結構 `ci_auth_role`
 --
 
@@ -34,7 +49,16 @@ CREATE TABLE IF NOT EXISTS `ci_auth_role` (
   `name__2` varchar(255) NOT NULL,
   `name__3` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- 轉存資料表中的資料 `ci_auth_role`
+--
+
+INSERT INTO `ci_auth_role` (`id`, `sort`, `deleted`, `name__1`, `name__2`, `name__3`) VALUES
+(1, 1, 0, '系統管理員', 'DEVELOPER', '系统管理员'),
+(2, 2, 0, '訪客', 'Visitors', '访客'),
+(3, 3, 0, '後台管理員', 'Admin', '后台管理员');
 
 -- --------------------------------------------------------
 
@@ -112,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `ci_meta_entity` (
   `sort` int(10) unsigned NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- 轉存資料表中的資料 `ci_meta_entity`
@@ -126,7 +150,8 @@ INSERT INTO `ci_meta_entity` (`id`, `name`, `table_name`, `sort`, `deleted`) VAL
 (5, 'backend_menu', 'backend_menu', 5, 0),
 (6, 'option', 'meta_option', 6, 0),
 (7, 'option_item', 'meta_option_item', 7, 0),
-(8, 'role', 'auth_role', 8, 0);
+(8, 'role', 'auth_role', 8, 0),
+(9, 'account', 'auth_account', 9, 0);
 
 -- --------------------------------------------------------
 
@@ -199,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `ci_meta_property` (
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`),
   KEY `type_id` (`type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=60 ;
 
 --
 -- 轉存資料表中的資料 `ci_meta_property`
@@ -259,7 +284,12 @@ INSERT INTO `ci_meta_property` (`id`, `parent_id`, `name`, `column_name`, `type_
 (51, 8, 'id', NULL, 1, 10, 0, 0, 0, 51, 0),
 (52, 8, 'sort', NULL, 1, 10, 0, 0, 0, 52, 0),
 (53, 8, 'deleted', NULL, 5, 10, 0, 0, 0, 53, 0),
-(54, 8, 'name', '', 2, 255, 0, 1, 1, 54, 0);
+(54, 8, 'name', '', 2, 255, 0, 1, 1, 54, 0),
+(55, 9, 'id', NULL, 1, 10, 0, 0, 0, 55, 0),
+(56, 9, 'sort', NULL, 1, 10, 0, 0, 0, 56, 0),
+(57, 9, 'deleted', NULL, 5, 10, 0, 0, 0, 57, 0),
+(58, 9, 'account', '', 2, 255, 0, 0, 0, 58, 0),
+(59, 9, 'password', '', 2, 255, 0, 1, 0, 59, 0);
 
 -- --------------------------------------------------------
 
@@ -312,8 +342,8 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-('bb9ca006ebc27e12ea8d27a1da89ef92', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0', 1394184624, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}'),
-('d5338ea2404702fb9d2d32985401362f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0 FirePHP/0.7.4', 1394189030, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}');
+('c90435131d0d480dd5e5782fe389ac62', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0 FirePHP/0.7.4', 1397100460, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}'),
+('deade06a9e08425722adabd47ad2677b', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0', 1397100457, 'a:2:{s:9:"user_data";s:0:"";s:7:"lang_id";s:1:"1";}');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
