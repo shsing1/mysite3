@@ -47,6 +47,8 @@ CKEDITOR.editorConfig = function( config ) {
     // config.filebrowserImageBrowseUrl = cfg.base_url + '/assets/js/pdw_file_browser/index.php?editor=ckeditor&filter=image',
     // config.filebrowserFlashBrowseUrl = cfg.base_url + '/assets/js/pdw_file_browser/index.php?editor=ckeditor&filter=flash'
 
+    config.baseHref = 'http://mysite3/';
+
     config.filebrowserBrowseUrl = cfg.base_url + '/assets/js/kcfinder/browse.php?type=files';
 	config.filebrowserImageBrowseUrl = cfg.base_url + '/assets/js/kcfinder/browse.php?type=images';
 	config.filebrowserFlashBrowseUrl = cfg.base_url + '/assets/js/kcfinder/browse.php?type=flash';

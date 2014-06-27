@@ -24,7 +24,7 @@ class Type extends Admin_Controller {
         $colModel[] = get_colmodel(array('name'=> 'name', 'required' => true));
         $colModel[] = get_colmodel(array('name'=> 'length', 'integer' => true));
         $colModel[] = get_colmodel(array('name'=> 'class_name', 'required' => true));
-        $colModel[] = get_colmodel(array('name'=> 'formatter', 'edittype' => 'textarea'));
+        $colModel[] = get_colmodel(array('name'=> 'formatter', 'editor' => true));
         $colModel[] = get_colmodel(array('name'=> 'deleted', 'hidden' => true));
         $colModel[] = get_colmodel(array('name'=> 'column_type', 'required' => true));
 

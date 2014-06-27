@@ -138,6 +138,8 @@ _.returnFile = function(file) {
         ? file : _.uploadURL + "/" + _.dir + "/" + file.data('name');
     fileURL = $.$.escapeDirs(fileURL);
 
+    fileURL = fileURL.substr(1);
+
     if (_.opener.name == "ckeditor") {
         _.opener.CKEditor.object.tools.callFunction(_.opener.CKEditor.funcNum, fileURL, "");
         window.close();
